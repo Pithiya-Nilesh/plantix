@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include plantix *.css
+recursive-include plantix *.csv
+recursive-include plantix *.html
+recursive-include plantix *.ico
+recursive-include plantix *.js
+recursive-include plantix *.json
+recursive-include plantix *.md
+recursive-include plantix *.png
+recursive-include plantix *.py
+recursive-include plantix *.svg
+recursive-include plantix *.txt
+recursive-exclude plantix *.pyc

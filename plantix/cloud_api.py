@@ -8,9 +8,25 @@ import frappe
 from frappe import _
 
 def detect_labels(file_content):
-    credentials = service_account.Credentials.from_service_account_file(
-        # '/home/nilesh-pithiya/Downloads/astro-sanskar-demo-65acfdc58ba9.json',
-        '/home/nilesh-pithiya/Downloads/farmer-doctor-d7a7baa81ac1.json',
+    # Define your service account key directly in your code
+    service_account_info = {
+        "type": "service_account",
+        "project_id": "farmer-doctor",
+        "private_key_id": "d7a7baa81ac1b8b4f77d4db61971ef447ae7519e",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDQcvG8DecQHb7Z\nLWjkhK3ogJR8dl+rgRdEZxblJtoSg18I1OwajiDDnq6rX5BJ0NC8pWn9oM4/8Y15\ntLzaeM/6Aqc9qFJIOt8Sjlsfs6JH+RDR+gFv48/eFOLoVKzZCfBGiUIxjbx389y0\nG3XkkJYOSWqyS7ECHC2Ue9bHDs+O3IZmu7ZvPpTHZPbc9P5imeYv8SlfC+a1+6DF\nPEGmCZsvmd5in5v2jm9gwEw2vpVuoVzFDjI0rXI7ky7J5B2AHGlIS6jMSHp+iMV2\nGqgNbRMRScSczO/QjCCfJRMGsTA6aV44sRKe81sQvUuTmmnwFh2blLNBJ9o4p1w/\n8yGWskD3AgMBAAECggEAGp7LS1JVM2QxFsgrUJ+3G+2ryNdPMXZbc9Ncg6g6Cko3\nrUeP3XZQLdtKgD1EjoC535WaWxcZr+XXxPa1dYsfOFT1abTgyTOngFWownws2dcv\ndDlizJjB16FANx51MoSH6GIoD28D5ifBBElLfYSPfUSX+Swcb2IM2h0UmThFfn9l\nNAaTs8iDgZ7WOd9dDnTC57g5dH4VMCgB3eF9tVzwjs+lrFvUQHNJJ3aLn38qq2I/\nswffFqtINVMEr6Jouwgfy9FKLdLUdoGrgfWjOkwyLY1LaPawlVzBYUCoJeD0KNQZ\nYN6Gy8y2Vy78yPdEAL1tPwOGMh8X04CMDPuX6XNkxQKBgQDnHkjXgCQElmMqAJr7\nz/qV3rriOa4UEU/r41RohNE9om92BZuaQbaFbLJQnEbabPQiSy5gZe0P1cGL/RXw\nqo2ljpnKoy4EMOLGlrejP+H3GLG8ntoQDtV2UcFZLInUV6SmEOnw6N54ukVdoO2W\nvuN94eSyq55LAh/Gt95jHBzLDQKBgQDm4+JyN0SM+cVw5M5ljwDYbluS35SdRsb1\niDKV24mzCP3rQuTheWVchovQ7tGHkpIr5Iel7dEaowRdVOptNPa4eJZS+EVCnakd\ndLWVVGO+hPmTO4h5kCbd/ph99hOo2ZmCL2WhODMRyCLOXjfkD5WiogkJDWZivHme\nkbYr50QrEwKBgQDLr3cG5ZnYqSlP9SSh1JPFzXvqsGborLFA9SKI0rUNmsCcxShz\ndIKFaFxmirQvAGLQbm2661lX4U0oMK5LYiRfyiNj4RhG/UZ/OokxSLW+7XaHA4Cv\nMkOSeU7rZkM6bttet/1VIgYfZBqJ/7AkcKtRX+oMRQ/Gj2Kt4ZIOytHdaQKBgQDO\n7SdyM4QVUHiaIAW2UT5xuh4J+KTpe5guTxz+311+fi2LXk1gofqsvMyruI1CkqK8\nAblshUGlPLpZpxPeQdxoIXKf82+nL0N0abefmJ04D1bZlD5QrFeZF2a1ZQfjiPki\nCrZrkcF7S0GecCRpGWqC8fNlEIRVMxNQgMiiekbGzwKBgQCd9DRQH/MryDAzrAQv\nJ/2W6HgdbWWom3XE4kl1pkhfZrLJvYiwu3X6OHW3qWagLWDUVZZb5J62n/IILnXq\nxDZXzR8a4nJt9+Wq08Xdb4/mu+yfSN0z+rU1b467u/ULbUSl5tPSnla6pVpS+NHm\nUKwS2lpfsCaYbwWTUU1XWG4mmg==\n-----END PRIVATE KEY-----\n",
+        "client_email": "farmer-doctor@farmer-doctor.iam.gserviceaccount.com",
+        "client_id": "110758421598125079924",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/farmer-doctor%40farmer-doctor.iam.gserviceaccount.com",
+        "universe_domain": "googleapis.com"
+    }
+
+
+    # Create credentials from the defined service account info
+    credentials = service_account.Credentials.from_service_account_info(
+        service_account_info,
         scopes=['https://www.googleapis.com/auth/cloud-platform']
     )
     client = vision.ImageAnnotatorClient(credentials=credentials)

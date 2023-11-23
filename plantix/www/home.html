@@ -67,16 +67,28 @@
     <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none;">
     
     <div id="result" class="result-container hidden">
-        <h3 class="mt-3">પરિણામ:</h3>
+        <h3 class="mt-3" id="p"></h3>
         <div class="mt-5 font-bold" id="diseaseName"></div>
         <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
         <div class="mt-5 font-bold" id="diseaseSolutions"></div>
         <div class="mt-5 font-bold" id="suggestProducts"></div>
     </div>
     <div class="mt-5 font-bold" id="re"></div>
-</div>
 
+    <div id="retry" style="display: none;">
+        <p>કૃપા કરીને ક્ષમા કરશો, હાલ અમને આ રોગની કોઈ માહિતી મળતી નથી.</p>
+        <button id="b" class="btn-primary rounded">ફરીથી પ્રયાસ કરો.</button>
+    </div>
+
+</div>
     <script>
+
+        // Add an event listener to the button
+        document.getElementById('b').addEventListener('click', function() {
+            // Reload the page
+            location.reload();
+        });
+
         function previewImage() {
                 setTimeout(function() {
                 document.getElementById('loadingScreen').style.display = 'flex';
@@ -105,27 +117,34 @@
                     // Handle the response from the server
                     console.log(response);
 
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-                
-                        reader.onload = function (e) {
-                            preview.src = e.target.result;
-                            preview.style.display = 'block';
-                        };
-                
-                        reader.readAsDataURL(input.files[0]);
-                    }
-
-                    var message = response.message[0]
+                    const message = response.message
                     
                     document.getElementById("d").classList.add('hidden')
+                    
+                    if (message === undefined) {
+                        console.log('The message is undefined');
+                        document.getElementById("retry").style.display = 'block'
+                        document.getElementById("p").innerHTML= "પરિણામ મળતું નથી:"
+                        
+                    } else {
+                        
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                    
+                            reader.onload = function (e) {
+                                preview.src = e.target.result;
+                                preview.style.display = 'block';
+                            };
+                    
+                            reader.readAsDataURL(input.files[0]);
+                        }
                     
                     // document.getElementById('re').innerHTML = '<strong>Google Result: </strong>' + response.message;
                     // document.getElementById('loadingScreen').style.display = 'none';
                     
                     // document.getElementById("result").classList.remove('hidden')
                     
-                    
+                    document.getElementById("p").innerHTML= "પરિણામ:"
                     document.getElementById('diseaseName').innerHTML = '<strong>રોગનું નામ: </strong>' + message.disease_name;
                     document.getElementById('diseaseSymptoms').innerHTML = '<strong>રોગના લક્ષણો: </strong>' + message.disease_symptoms;
                     document.getElementById('diseaseSolutions').innerHTML = '<strong>રોગનો ઉકેલ: </strong>' + message.disease_solutions;
@@ -156,6 +175,7 @@
                         rowDiv.appendChild(colDiv);
                     }
                 }
+            }
                     
                     
                     document.getElementById('loadingScreen').style.display = 'none';

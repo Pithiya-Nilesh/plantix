@@ -57,8 +57,9 @@ def detect_labels(file_content):
             if final_data:
                 m_data.append(i["name"])
 
-    if m_data: 
-        return frappe.get_doc("Diseases Response And Products", m_data[0]), data
+    if m_data:
+        # return {"details": frappe.get_doc("Diseases Response And Products", m_data[0]), "g_data":data}
+        return frappe.get_doc("Diseases Response And Products", m_data[0])
 
 @frappe.whitelist()
 def check_image(image_url):

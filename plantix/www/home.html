@@ -1,0 +1,178 @@
+{% extends 'templates/web.html' %}
+
+{% block title %}Upload Image{% endblock %}
+
+{% block head_include %}
+ <style>
+        /* Add custom styles here */
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .page-container {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loadingSpinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h3{
+            margin-top: 0rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div id="loadingScreen">
+    <div id="loadingSpinner"></div>
+</div>
+
+<div class="page-container container">
+    <div class="content" id="d">
+        <h3>છબી સ્કેન કરો</h3>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label for="image">એક છબી પસંદ કરો:</label>
+            <input type="file" name="image" id="image" accept="image/*" required onchange="previewImage()" class="form-control-file">
+            <br>
+            <!-- <button id="button" type="button" onclick="uploadImage()" class="btn btn-primary">છબી સ્કેન કરો</button> -->
+        </form>
+    </div>
+    <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none;">
+    
+    <div id="result" class="result-container hidden">
+        <h3 class="mt-3">પરિણામ:</h3>
+        <div class="mt-5 font-bold" id="diseaseName"></div>
+        <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
+        <div class="mt-5 font-bold" id="diseaseSolutions"></div>
+        <div class="mt-5 font-bold" id="suggestProducts"></div>
+    </div>
+    <div class="mt-5 font-bold" id="re"></div>
+</div>
+
+    <script>
+        function previewImage() {
+                setTimeout(function() {
+                document.getElementById('loadingScreen').style.display = 'flex';
+            setTimeout(uploadImage, 2000);
+        }, 0); // Use 0 milliseconds to let the current execution context finish
+
+
+    }
+    
+    function uploadImage() {
+        var input = document.getElementById('image');
+        var preview = document.getElementById('preview');
+    
+        
+
+        var formData = new FormData();
+        formData.append('image', document.getElementById('image').files[0]);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/method/plantix.cloud_api.scan_image', true);
+
+            // Set up the callback function to handle the response
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    // Handle the response from the server
+                    console.log(response);
+
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                
+                        reader.onload = function (e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        };
+                
+                        reader.readAsDataURL(input.files[0]);
+                    }
+
+                    var message = response.message[0]
+                    
+                    document.getElementById("d").classList.add('hidden')
+                    
+                    // document.getElementById('re').innerHTML = '<strong>Google Result: </strong>' + response.message;
+                    // document.getElementById('loadingScreen').style.display = 'none';
+                    
+                    // document.getElementById("result").classList.remove('hidden')
+                    
+                    
+                    document.getElementById('diseaseName').innerHTML = '<strong>રોગનું નામ: </strong>' + message.disease_name;
+                    document.getElementById('diseaseSymptoms').innerHTML = '<strong>રોગના લક્ષણો: </strong>' + message.disease_symptoms;
+                    document.getElementById('diseaseSolutions').innerHTML = '<strong>રોગનો ઉકેલ: </strong>' + message.disease_solutions;
+                    
+                    var suggestProductsDiv = document.getElementById('suggestProducts');
+                    suggestProductsDiv.innerHTML = '<strong>ભલામણ કરેલ દવાઓ: </strong><br>';
+                    
+                    if (message.suggest_products){
+                    // Assuming suggestProducts is an array
+                    for (var i = 0; i < message.suggest_products.length; i++) {
+                        // Create a new row for every 4 items
+                        if (i % 4 === 0) {
+                                var rowDiv = document.createElement('div');
+                            rowDiv.className = 'row';
+                            suggestProductsDiv.appendChild(rowDiv);
+                        }
+                    
+                        // Create a column for each item
+                        var colDiv = document.createElement('div');
+                        colDiv.className = 'col-md-3'; // Adjust the column size as needed
+                        colDiv.innerHTML = `
+                            <img src="${window.location.origin + message.suggest_products[i].image}" class="mt-5" alt="Product Image">
+                            <div><strong>દવાનું નામ: </strong>${message.suggest_products[i].suggest_product}</div>
+                            <div class="mb-5"><strong>કિંમત: </strong>${message.suggest_products[i].price}</div>
+                        `;
+                    
+                        // Append the column to the current row
+                        rowDiv.appendChild(colDiv);
+                    }
+                }
+                    
+                    
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    
+                    document.getElementById("result").classList.remove('hidden')
+                    
+                    // You can display the scan results or take further action here
+                } else {
+                    // Handle errors
+                    console.error('Error uploading image:', xhr.status, xhr.statusText);
+                }
+            };
+            
+            // Send the FormData with the image file
+            xhr.send(formData);
+        }
+        </script>
+
+
+{% endblock %}

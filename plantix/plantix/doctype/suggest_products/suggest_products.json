@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-20 13:03:37.906472",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "suggest_product",
+  "image",
+  "price"
+ ],
+ "fields": [
+  {
+   "fetch_from": "suggest_product.image",
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fetch_from": "suggest_product.standard_rate",
+   "fieldname": "price",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Price"
+  },
+  {
+   "fieldname": "suggest_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Suggest Products",
+   "options": "Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-11-20 17:01:02.474943",
+ "modified_by": "Administrator",
+ "module": "Plantix",
+ "name": "Suggest Products",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

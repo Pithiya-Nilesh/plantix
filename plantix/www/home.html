@@ -106,8 +106,20 @@
 
         function previewImage() {
                 setTimeout(function() {
-                document.getElementById('loadingScreen').style.display = 'flex';
-            setTimeout(uploadImage, 2000);
+                    var mobileInput = document.getElementById('mobileNumber');
+                    var mobileError = document.getElementById('mobileError');
+
+                    // Validate the mobile number (you can customize this validation as needed)
+                    var mobileRegex = /^[0-9]{10}$/;
+                    if (!mobileRegex.test(mobileInput.value)) {
+                        mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
+                        mobileInput.classList.add('is-invalid');
+                    } else {
+                        mobileError.textContent = '';
+                        mobileInput.classList.remove('is-invalid');
+                        document.getElementById('loadingScreen').style.display = 'flex';
+                    }
+                        setTimeout(uploadImage, 2000);
         }, 0); // Use 0 milliseconds to let the current execution context finish
 
 
@@ -119,19 +131,6 @@
         // if (!mobileNumber){
         //     document.getElementById('errorMessage').textContent = 'Invalid mobile number. Please enter a 10-digit number.';
         // }
-
-        var mobileInput = document.getElementById('mobileNumber');
-            var mobileError = document.getElementById('mobileError');
-
-            // Validate the mobile number (you can customize this validation as needed)
-            var mobileRegex = /^[0-9]{10}$/;
-            if (!mobileRegex.test(mobileInput.value)) {
-                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
-                mobileInput.classList.add('is-invalid');
-            } else {
-                mobileError.textContent = '';
-                mobileInput.classList.remove('is-invalid');
-            }
 
         var input = document.getElementById('image');
         var preview = document.getElementById('preview');
@@ -238,7 +237,10 @@
             } else {
                 mobileError.textContent = '';
                 mobileInput.classList.remove('is-invalid');
+                
             }
+
+
         }
 
         </script>

@@ -66,14 +66,17 @@ def check_image(image_url):
     return detect_labels(image_url)
 
 @frappe.whitelist(allow_guest=True)
-def scan_image():
+def scan_image(mobile_number):
     # if frappe.session.user == "Guest":
     #     frappe.throw(_("You need to be logged in to upload an image"))
+    if mobile_number:
+        return "multiple message"
 
     if frappe.request.method != "POST":
         frappe.throw(_("Invalid Request"))
 
     uploaded_file = frappe.request.files.get("image")
+    print("\n\n mobile number", mobile_number)
 
     if not uploaded_file:
         frappe.throw(_("No image file attached"))

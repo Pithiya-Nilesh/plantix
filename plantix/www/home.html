@@ -56,9 +56,24 @@
 
 <div class="page-container container">
     <div class="content" id="d">
-        <h3>છબી સ્કેન કરો</h3>
+        <div class="">
+            {% set mobile_number = frappe.session.get('mobile_number') %}
+    
+            {% if mobile_number %}
+            
+            {% else %}
+            <div class="">
+                <h5 for="mobileNumber" class="form-label">મોબાઇલ નંબર દાખલ કરો:</h5>
+                <div class="">
+                    <input type="text" class="form-control w-25" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" onblur="validateMobile()">                </div>
+                    <div id="mobileError" class="text-danger"></div>
+            </div>
+            {% endif %}
+        </div>
+
+        <h5 class="mt-2">છબી સ્કેન કરો</h5>
         <form id="uploadForm" enctype="multipart/form-data">
-            <label for="image">એક છબી પસંદ કરો:</label>
+            <!-- <label for="image">એક છબી પસંદ કરો:</label> -->
             <input type="file" name="image" id="image" accept="image/*" required onchange="previewImage()" class="form-control-file">
             <br>
             <!-- <button id="button" type="button" onclick="uploadImage()" class="btn btn-primary">છબી સ્કેન કરો</button> -->
@@ -99,16 +114,34 @@
     }
     
     function uploadImage() {
+
+        // var mobileNumber = document.getElementById('mobileNumber').value;
+        // if (!mobileNumber){
+        //     document.getElementById('errorMessage').textContent = 'Invalid mobile number. Please enter a 10-digit number.';
+        // }
+
+        var mobileInput = document.getElementById('mobileNumber');
+            var mobileError = document.getElementById('mobileError');
+
+            // Validate the mobile number (you can customize this validation as needed)
+            var mobileRegex = /^[0-9]{10}$/;
+            if (!mobileRegex.test(mobileInput.value)) {
+                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
+                mobileInput.classList.add('is-invalid');
+            } else {
+                mobileError.textContent = '';
+                mobileInput.classList.remove('is-invalid');
+            }
+
         var input = document.getElementById('image');
         var preview = document.getElementById('preview');
-    
-        
 
         var formData = new FormData();
         formData.append('image', document.getElementById('image').files[0]);
+        formData.append("mobile_number", mobileInput.value)
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/method/plantix.cloud_api.scan_image', true);
+            xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${mobileInput.value}`, true);
 
             // Set up the callback function to handle the response
             xhr.onload = function () {
@@ -175,12 +208,10 @@
                         rowDiv.appendChild(colDiv);
                     }
                 }
-            }
-                    
-                    
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    
-                    document.getElementById("result").classList.remove('hidden')
+            }                    
+                document.getElementById('loadingScreen').style.display = 'none';
+                
+                document.getElementById("result").classList.remove('hidden')
                     
                     // You can display the scan results or take further action here
                 } else {
@@ -192,7 +223,24 @@
             // Send the FormData with the image file
             xhr.send(formData);
         }
-        </script>
 
+
+
+        function validateMobile() {
+            var mobileInput = document.getElementById('mobileNumber');
+            var mobileError = document.getElementById('mobileError');
+
+            // Validate the mobile number (you can customize this validation as needed)
+            var mobileRegex = /^[0-9]{10}$/;
+            if (!mobileRegex.test(mobileInput.value)) {
+                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
+                mobileInput.classList.add('is-invalid');
+            } else {
+                mobileError.textContent = '';
+                mobileInput.classList.remove('is-invalid');
+            }
+        }
+
+        </script>
 
 {% endblock %}

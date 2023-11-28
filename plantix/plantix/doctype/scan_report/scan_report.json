@@ -10,12 +10,15 @@
   "mobile_no",
   "image",
   "found_result",
-  "result"
+  "result",
+  "google_result"
  ],
  "fields": [
   {
    "fieldname": "mobile_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Mobile No"
   },
   {
@@ -27,18 +30,28 @@
    "default": "0",
    "fieldname": "found_result",
    "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Found Result"
   },
   {
    "fieldname": "result",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Result",
    "options": "Diseases Response And Products"
+  },
+  {
+   "fieldname": "google_result",
+   "fieldtype": "Long Text",
+   "in_list_view": 1,
+   "label": "Google Result"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-25 11:57:18.962252",
+ "modified": "2023-11-25 13:38:59.386314",
  "modified_by": "Administrator",
  "module": "Plantix",
  "name": "Scan Report",

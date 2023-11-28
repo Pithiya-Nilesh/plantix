@@ -56,20 +56,20 @@
 
 <div class="page-container container">
     <div class="content" id="d">
-        <div class="">
-            {% set mobile_number = frappe.session.get('mobile_number') %}
-    
-            {% if mobile_number %}
-            
-            {% else %}
+        <div class="mobile_number">
             <div class="">
                 <h5 for="mobileNumber" class="form-label">મોબાઇલ નંબર દાખલ કરો:</h5>
                 <div class="">
-                    <input type="text" class="form-control w-25" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" onblur="validateMobile()">                </div>
+                    {% if frappe.session.mobile_number %}
+                        <input type="text" class="form-control w-25" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" readonly value="{{ frappe.session.mobile_number }}">
+                    {% else %}
+                        <input type="text" class="form-control w-25" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" onblur="validateMobile()">
+                    {% endif %}
                     <div id="mobileError" class="text-danger"></div>
+                </div>
             </div>
-            {% endif %}
         </div>
+        
 
         <h5 class="mt-2">છબી સ્કેન કરો</h5>
         <form id="uploadForm" enctype="multipart/form-data">
@@ -95,6 +95,10 @@
         <button id="b" class="btn-primary rounded">ફરીથી પ્રયાસ કરો.</button>
     </div>
 
+    <div id="reach_limit" style="display: none;">
+        <p>કૃપા કરીને ક્ષમા કરશો, તમે ઈમેજ સ્કેન કરવાના મહત્તમ પ્રયાસો સુધી પહોંચી ગયા છો</p>
+    </div>
+
 </div>
     <script>
 
@@ -104,23 +108,30 @@
             location.reload();
         });
 
-        function previewImage() {
-                setTimeout(function() {
-                    var mobileInput = document.getElementById('mobileNumber');
-                    var mobileError = document.getElementById('mobileError');
+        var storedMobileNumber = getCookie('mobile_number');
+    if (storedMobileNumber) {
+        var mobileInput = document.getElementById('mobileNumber');
+        mobileInput.value = storedMobileNumber;
+        mobileInput.readOnly = true; // Set the field as readonly
+    }
 
-                    // Validate the mobile number (you can customize this validation as needed)
-                    var mobileRegex = /^[0-9]{10}$/;
-                    if (!mobileRegex.test(mobileInput.value)) {
-                        mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
-                        mobileInput.classList.add('is-invalid');
-                    } else {
-                        mobileError.textContent = '';
-                        mobileInput.classList.remove('is-invalid');
-                        document.getElementById('loadingScreen').style.display = 'flex';
-                    }
-                        setTimeout(uploadImage, 2000);
-        }, 0); // Use 0 milliseconds to let the current execution context finish
+        function previewImage() {
+            var mobileInput = document.getElementById('mobileNumber');
+            var mobileError = document.getElementById('mobileError');
+
+            // Validate the mobile number (you can customize this validation as needed)
+            var mobileRegex = /^[0-9]{10}$/;
+            if (!mobileRegex.test(mobileInput.value)) {
+                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
+                mobileInput.classList.add('is-invalid');
+            } else {
+                mobileError.textContent = '';
+                mobileInput.classList.remove('is-invalid');
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').style.display = 'flex';
+                    setTimeout(uploadImage, 2000);
+                }, 0); // Use 0 milliseconds to let the current execution context finish
+            }
 
 
     }
@@ -134,13 +145,16 @@
 
         var input = document.getElementById('image');
         var preview = document.getElementById('preview');
+        var mobileInput = document.getElementById('mobileNumber');
 
+        frappe.session.mobile_number = mobileInput.value
         var formData = new FormData();
         formData.append('image', document.getElementById('image').files[0]);
         formData.append("mobile_number", mobileInput.value)
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${mobileInput.value}`, true);
+            // xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${mobileInput.value}`, true);
+            xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${getCookie(mobileInput.value)}`, true);
 
             // Set up the callback function to handle the response
             xhr.onload = function () {
@@ -152,11 +166,17 @@
                     const message = response.message
                     
                     document.getElementById("d").classList.add('hidden')
-                    
+                    if (message == "Reach Limit"){
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        console.log("Reach Limit")
+                        document.getElementById("reach_limit").style.display = 'block'
+                        document.getElementById("p").innerHTML= ""
+                        return
+                    }
                     if (message === undefined) {
                         console.log('The message is undefined');
                         document.getElementById("retry").style.display = 'block'
-                        document.getElementById("p").innerHTML= "પરિણામ મળતું નથી:"
+                        document.getElementById("p").innerHTML= "પરિણામ મળતું નથી."
                         
                     } else {
                         
@@ -171,8 +191,8 @@
                             reader.readAsDataURL(input.files[0]);
                         }
                     
-                    // document.getElementById('re').innerHTML = '<strong>Google Result: </strong>' + response.message;
-                    // document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('re').innerHTML = '<strong>Google Result: </strong>' + response.message;
+                    document.getElementById('loadingScreen').style.display = 'none';
                     
                     // document.getElementById("result").classList.remove('hidden')
                     
@@ -223,11 +243,10 @@
             xhr.send(formData);
         }
 
-
-
         function validateMobile() {
             var mobileInput = document.getElementById('mobileNumber');
             var mobileError = document.getElementById('mobileError');
+            var input = document.getElementById('image');
 
             // Validate the mobile number (you can customize this validation as needed)
             var mobileRegex = /^[0-9]{10}$/;
@@ -237,11 +256,40 @@
             } else {
                 mobileError.textContent = '';
                 mobileInput.classList.remove('is-invalid');
+                setCookie('mobile_number', mobileInput.value, 365);
+                if (input.value.trim() !== '') {
+                    previewImage();
+                }
                 
             }
-
-
         }
+        // Function to get a cookie by name
+function getCookie(name) {
+    var nameEQ = name + '=';
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1, cookie.length);
+        }
+        if (cookie.indexOf(nameEQ) === 0) {
+            return cookie.substring(nameEQ.length, cookie.length);
+        }
+    }
+    return null;
+}
+
+// Function to set a cookie
+function setCookie(name, value, days) {
+    var expires = '';
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + value + expires + '; path=/';
+}
+
 
         </script>
 

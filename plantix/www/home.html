@@ -131,7 +131,7 @@
                     <form id="uploadForm" enctype="multipart/form-data">
                         <div class="row justify-content-center">
                             <div class="w-100">
-                                <label for="image" id="uploadBtn" class="text-center">ફોટો પાડો </label>
+                                <label for="image" id="uploadBtn" class="text-center">ફોટો પાડો</label>
                                 <input type="file" name="image" id="image" accept="image/*" required onchange="previewImage()" class="form-control-file">
                                 <br>
                             </div>
@@ -147,16 +147,17 @@
     
     <div id="result" class="result-container hidden container">
         <h3 class="mt-3" id="p">પરિણામ મળતું નથી.</h3>
-        <div class="mt-5 font-bold p-3" id="diseaseName" style="background-color: #F5EDA8;"></div>
+        <div class="font-bold p-3" id="diseaseName" style="background-color: #F5EDA8; border-radius: 5px"></div>
         <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none; border-radius: 10px;">
         <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
-        <div class="mt-5 font-bold" id="diseaseSolutions"></div>
+        <div class="mt-5 font-bold p-3" id="diseaseSolutions" style="background-color: #F5EDA8; border-radius: 10px;"></div>
         <div class="mt-5 font-bold" id="suggestProducts"></div>
     </div>
     
     <div class="mt-5 font-bold" id="re"></div>
 
-    <div id="retry" class="px-5 justify-center flex-wrap mb-10 " style="display: none; align-items: center;">
+    <div id="retry" class="px-5 justify-center flex-wrap my-10" style="display: none; align-items: center;">
+        <h3 id="rp">પરિણામ મળતું નથી.</h3>
         <p>કૃપા કરીને ક્ષમા કરશો, હાલ અમને આ રોગની કોઈ માહિતી મળતી નથી.</p>
         <button id="b" class="btn rounded" style="background-color: #0D986A; color:white">ફરીથી પ્રયાસ કરો.</button>
     </div>
@@ -241,8 +242,9 @@
                     }
                     if (message === undefined) {
                         console.log('The message is undefined');
-                        document.getElementById("retry").style.display = 'flex'
-                        document.getElementById("p").innerHTML= "પરિણામ મળતું નથી."
+                        document.getElementById("retry").style.display = 'grid'
+                        document.getElementById("result").style.display = 'none'
+                        document.getElementById("rp").innerHTML= "પરિણામ મળતું નથી."
                         document.getElementById("diseaseName").style.display = "none"
                         
                     } else {

@@ -162,8 +162,9 @@
         <button id="b" class="btn rounded" style="background-color: #0D986A; color:white">ફરીથી પ્રયાસ કરો.</button>
     </div>
 
-    <div id="reach_limit" class="px-5 justify-center" style="display: none; min-height:10rem; align-items: center;">
+    <div id="reach_limit" class="px-5 justify-center flex-wrap my-10" style="display: none; min-height:6rem; align-items: center;">
         <strong>કૃપા કરીને ક્ષમા કરશો, તમે ઈમેજ સ્કેન કરવાના મહત્તમ પ્રયાસો સુધી પહોંચી ગયા છો.</strong>
+        <a href="/" class="btn rounded" style="background-color: #0D986A; color:white">પાછા જાવ</a>
     </div>
 
 </div>
@@ -236,7 +237,7 @@
                     if (message == "Reach Limit"){
                         document.getElementById('loadingScreen').style.display = 'none';
                         console.log("Reach Limit")
-                        document.getElementById("reach_limit").style.display = 'flex'
+                        document.getElementById("reach_limit").style.display = 'grid'
                         document.getElementById("p").innerHTML= ""
                         return
                     }

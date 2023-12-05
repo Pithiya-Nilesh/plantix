@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "image",
+  "crop_name",
   "response",
   "label_found",
   "disease_name",
@@ -52,11 +53,16 @@
    "fieldname": "label_found",
    "fieldtype": "Small Text",
    "label": "Label Found"
+  },
+  {
+   "fieldname": "crop_name",
+   "fieldtype": "Data",
+   "label": "Crop Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-22 15:11:40.323164",
+ "modified": "2023-12-05 11:09:17.450110",
  "modified_by": "Administrator",
  "module": "Plantix",
  "name": "Diseases Response And Products",

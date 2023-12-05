@@ -46,7 +46,7 @@ def detect_labels(file_content, mobile_number, image_url):
 
     # data = ['Food', 'Plant', 'Fruit', 'Terrestrial plant', 'Natural foods', 'Produce', 'Tree', 'Flowering plant', 'Fruit tree', 'Twig']
 
-    f_data = frappe.db.get_list("Diseases Response And Products", fields=["name", "label_found"])
+    f_data = frappe.db.get_list("Diseases Response And Products", filters={"enable": 1}, fields=["name", "label_found"])
     import json
     import ast
     m_data = []

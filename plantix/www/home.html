@@ -73,9 +73,9 @@
         background: #FFF;
         padding-left: 20px;
         padding-right: 20px;
-            border-radius: 8px;
-            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-            margin: 20px;
+        border-radius: 8px;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        margin: 20px;
     }
     #aa{
         /* min-height: 80vh; */
@@ -140,34 +140,30 @@
                 </div>
             </div>
         
-    </div>
-    
+        </div>
+        <div id="result" class="result-container hidden container max-w-[100vh]">
+            <h3 class="mt-3" id="p">પરિણામ મળતું નથી.</h3>
+            <div class="font-bold p-3" id="cropName" style="background-color: #F5EDA8; border-radius: 5px"></div>
+            <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none; border-radius: 10px;">
+            <div class="font-bold p-3 mt-5" id="diseaseName" style="background-color: #F5EDA8; border-radius: 5px"></div>
+            <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
+            <div class="mt-5 font-bold p-3" id="diseaseSolutions" style="background-color: #F5EDA8; border-radius: 10px;"></div>
+            <div class="mt-5 font-bold" id="suggestProducts"></div>
+        </div>
+        
+        <div class="mt-5 font-bold" id="re"></div>
 
-    
-    <div id="result" class="result-container hidden container">
-        <h3 class="mt-3" id="p">પરિણામ મળતું નથી.</h3>
-        <div class="font-bold p-3" id="cropName"></div>
-        <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none; border-radius: 10px;">
-        <div class="font-bold p-3 mt-5" id="diseaseName" style="background-color: #F5EDA8; border-radius: 5px"></div>
-        <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
-        <div class="mt-5 font-bold p-3" id="diseaseSolutions" style="background-color: #F5EDA8; border-radius: 10px;"></div>
-        <div class="mt-5 font-bold" id="suggestProducts"></div>
-    </div>
-    
-    <div class="mt-5 font-bold" id="re"></div>
+        <div id="retry" class="px-5 justify-center flex-wrap my-10" style="display: none; align-items: center;">
+            <h3 id="rp">પરિણામ મળતું નથી.</h3>
+            <p>કૃપા કરીને ક્ષમા કરશો, હાલ અમને આ રોગની કોઈ માહિતી મળતી નથી.</p>
+            <button id="b" class="btn rounded" style="background-color: #0D986A; color:white">ફરીથી પ્રયાસ કરો.</button>
+        </div>
 
-    <div id="retry" class="px-5 justify-center flex-wrap my-10" style="display: none; align-items: center;">
-        <h3 id="rp">પરિણામ મળતું નથી.</h3>
-        <p>કૃપા કરીને ક્ષમા કરશો, હાલ અમને આ રોગની કોઈ માહિતી મળતી નથી.</p>
-        <button id="b" class="btn rounded" style="background-color: #0D986A; color:white">ફરીથી પ્રયાસ કરો.</button>
+        <div id="reach_limit" class="px-5 justify-center flex-wrap my-10" style="display: none; min-height:6rem; align-items: center;">
+            <strong>કૃપા કરીને ક્ષમા કરશો, તમે ઈમેજ સ્કેન કરવાના મહત્તમ પ્રયાસો સુધી પહોંચી ગયા છો.</strong>
+            <a href="/" class="btn rounded" style="background-color: #0D986A; color:white">પાછા જાવ</a>
+        </div>
     </div>
-
-    <div id="reach_limit" class="px-5 justify-center flex-wrap my-10" style="display: none; min-height:6rem; align-items: center;">
-        <strong>કૃપા કરીને ક્ષમા કરશો, તમે ઈમેજ સ્કેન કરવાના મહત્તમ પ્રયાસો સુધી પહોંચી ગયા છો.</strong>
-        <a href="/" class="btn rounded" style="background-color: #0D986A; color:white">પાછા જાવ</a>
-    </div>
-
-</div>
 </div>
 
     <script>
@@ -271,10 +267,10 @@
                     document.getElementById('diseaseSymptoms').innerHTML = '<strong>રોગના લક્ષણો: </strong>' + message.disease_symptoms;
                     document.getElementById('diseaseSolutions').innerHTML = '<strong>રોગનો ઉકેલ: </strong>' + message.disease_solutions;
                     
-                    var suggestProductsDiv = document.getElementById('suggestProducts');
-                    suggestProductsDiv.innerHTML = '<strong>ભલામણ કરેલ દવાઓ: </strong><br>';
                     
-                    if (message.suggest_products){
+                    if (message.suggest_products.length > 0){
+                        var suggestProductsDiv = document.getElementById('suggestProducts');
+                        suggestProductsDiv.innerHTML = '<strong>ભલામણ કરેલ દવાઓ: </strong><br>';
                     // Assuming suggestProducts is an array
                     for (var i = 0; i < message.suggest_products.length; i++) {
                         // Create a new row for every 4 items

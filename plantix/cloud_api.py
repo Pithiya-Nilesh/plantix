@@ -67,7 +67,9 @@ def detect_labels(file_content, mobile_number, image_url):
         sr.insert(ignore_permissions=True)
         frappe.db.commit()
         # return {"details": frappe.get_doc("Diseases Response And Products", m_data[0]), "g_data":data}
-        return frappe.get_doc("Diseases Response And Products", m_data[0])
+        doc = frappe.get_doc("Diseases Response And Products", m_data[0])
+        if doc.enable == 1:
+            return data
         # return data
     
     else:
@@ -88,9 +90,9 @@ def check_image(image_url):
 def scan_image(mobile_number):
     # if frappe.session.user == "Guest":
     #     frappe.throw(_("You need to be logged in to upload an image")
-    
+
     count = frappe.db.count('Scan Report', {'mobile_no': mobile_number})
-    if mobile_number == 1234567890:
+    if mobile_number == '1234567890':
         count = 0
 
     if count >= 3:

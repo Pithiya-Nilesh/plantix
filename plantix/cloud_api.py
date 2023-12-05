@@ -67,9 +67,7 @@ def detect_labels(file_content, mobile_number, image_url):
         sr.insert(ignore_permissions=True)
         frappe.db.commit()
         # return {"details": frappe.get_doc("Diseases Response And Products", m_data[0]), "g_data":data}
-        doc = frappe.get_doc("Diseases Response And Products", m_data[0])
-        if doc.enable == 1:
-            return data
+        return frappe.get_doc("Diseases Response And Products", m_data[0])
         # return data
     
     else:

@@ -110,7 +110,9 @@
     <div class="container px-0 flex flex-wrap justify-center">
         <div class="content" id="d">
             <img src="https://farming-doctor.frappe.cloud/files/tab bar.svg" class="p-0 w-100"/>
-   
+
+                          
+                        
             <!-- <img id="preview" src="https://content3.jdmagicbox.com/comp/navi-mumbai/l4/022pxx22.xx22.220129175435.x1l4/catalogue/go-green-fruit-and-vegitable-nerul-navi-mumbai-vegetable-vendors-zd9urmtogl.jpg" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: block; border-radius: 10px;">             -->
             <!-- <img id="preview" src="https://content3.jdmagicbox.com/comp/navi-mumbai/l4/022pxx22.xx22.220129175435.x1l4/catalogue/go-green-fruit-and-vegitable-nerul-navi-mumbai-vegetable-vendors-zd9urmtogl.jpg" alt="Preview"> -->
 
@@ -194,7 +196,7 @@
                         <div class="row justify-content-center">
                             <div class="w-100">
                                 <label for="image" id="uploadBtn" class="text-center">ફોટો પાડો</label>
-                                <input type="file" name="image" id="image" accept="image/*" required onchange="previewImage()" class="form-control-file">
+                                <input type="" name="image" id="image" accept="image/*" required onclick="previewImage()" class="form-control-file">
                                 <br>
                             </div>
                         </div>
@@ -276,7 +278,7 @@
 
         frappe.session.mobile_number = mobileInput.value
         var formData = new FormData();
-        formData.append('image', document.getElementById('image').files[0]);
+        // formData.append('image', document.getElementById('image').files[0]);
         formData.append("mobile_number", mobileInput.value)
 
             var xhr = new XMLHttpRequest();
@@ -309,15 +311,17 @@
                         document.getElementById("cropName").style.display = "none"
                         
                     } else {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
+                        preview.src = "https://farming-doctor.frappe.cloud/files/IMG20231205084148%20(1).jpg";
+                        preview.style.display = 'block';
+                        // if (input.files && input.files[0]) {
+                        //     var reader = new FileReader();
                     
-                            reader.onload = function (e) {
-                                preview.src = e.target.result;
-                                preview.style.display = 'block';
-                            };
-                            reader.readAsDataURL(input.files[0]);
-                        }
+                        //     reader.onload = function (e) {
+                        //         // preview.src = "https://farming-doctor.frappe.cloud/files/IMG20231205084148%20(1).jpg";
+                        //         // preview.style.display = 'block';
+                        //     };
+                        //     reader.readAsDataURL(input.files[0]);
+                        // }
                     
                     // document.getElementById('re').innerHTML = '<strong>Google Result: </strong>' + response.message;
                     document.getElementById('loadingScreen').style.display = 'none';

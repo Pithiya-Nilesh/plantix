@@ -1,0 +1,376 @@
+{% extends 'templates/web.html' %}
+
+{% block title %}Upload Image{% endblock %}
+
+{% block head_include %}
+ <style>
+        /* Add custom styles here */
+        body {
+            background-color: #f8f9fa;
+            color: #495057;
+            background: #FFF;
+        }
+        .page-container {
+            padding: 20px;
+            /* height: 100%; */
+            background-color: #ffffff;
+            /* border-radius: 8px; */
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+            /* margin-top: 20px;
+            margin-bottom: 20px; */
+        }
+        #loadingScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loadingSpinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h3{
+            margin-top: 0rem;
+        }
+
+        #uploadBtn {
+        cursor: pointer;
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #0D986A;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        width: -webkit-fill-available
+    }
+
+    #image {
+        display: none;
+    }
+
+    mo{
+        width: -webkit-fill-available
+    }
+
+    .scan{
+        border-radius: 10px;
+        border: 1px solid #D0D0D0;
+        background: #FFF;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-radius: 8px;
+        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+        margin: 20px;
+    }
+    #aa{
+        /* min-height: 80vh; */
+        margin-top: -1px;
+    }
+    #preview {
+    max-width: 100%;
+    max-height: 300px;
+    margin-top: 10px;
+    display: block;
+    border-radius: 10px;
+  }
+
+  
+  @media only screen and (max-width: 400px) {
+    #preview {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+
+<div id="loadingScreen">
+    <div id="loadingSpinner"></div>
+</div>
+
+<div id="aa">
+    <div class="container px-0 flex flex-wrap justify-center">
+        <div class="content" id="d">
+            <!-- <img src="https://farming-doctor.frappe.cloud/files/01%20Splash.svg" class="w-100 p-0"/> -->
+            <img src="https://farming-doctor.frappe.cloud/files/tab bar.svg" class="p-0 w-100"/>
+
+
+            <h3 class="text-xl text-[#002140] font-bold container mt-5">તમારા પાકને સાજો કરો</h3>
+            <div class="scan">
+
+                <div class="border-2 rounded-lg mt-5">
+                    <div class="flex space-x-4 md:justify-left justify-center mt-10">
+                        <img src="https://farming-doctor.frappe.cloud/files/leave.svg" alt="">
+                        <img class="mb-8 ml-4" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
+                        <img src="https://farming-doctor.frappe.cloud/files/right_mobile.svg" alt="">
+                        <img class="mb-8" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
+                        <img src="https://farming-doctor.frappe.cloud/files/lend.svg" alt="">
+                    </div>
+                </div>
+
+                
+                <div class="mobile_number mt-10">
+                    <div class="">
+                        <div class="flex flex-wrap">
+                            {% if frappe.session.mobile_number %}
+                            <h5 for="mobileNumber" class="form-label">મોબાઇલ નંબર દાખલ કરો:</h5>
+                            <input type="text" class="form-control mo" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" readonly value="{{ frappe.session.mobile_number }}">
+                            {% else %}
+                            <h5 for="mobileNumber" class="form-label">મોબાઇલ નંબર દાખલ કરો:</h5>
+                            <input type="text" class="form-control mo" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" onblur="validateMobile()">
+                            {% endif %}
+                            <div id="mobileError" class="text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-3 mt-5">
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="row justify-content-center">
+                            <div class="w-100">
+                                <label for="image" id="uploadBtn" class="text-center">ફોટો પાડો</label>
+                                <input type="file" name="image" id="image" accept="image/*" required onchange="previewImage()" class="form-control-file">
+                                <br>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        
+        </div>
+        <div id="result" class="result-container hidden container max-w-[100vh]">
+            <h3 class="mt-3" id="p">પરિણામ મળતું નથી.</h3>
+            <div class="font-bold p-3" id="cropName" style="background-color: #F5EDA8; border-radius: 5px"></div>
+            <!-- <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none; border-radius: 10px;"> -->
+            <img id="preview" src="#" alt="Preview">
+            <div class="font-bold p-3 mt-5" id="diseaseName" style="background-color: #F5EDA8; border-radius: 5px"></div>
+            <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
+            <div class="mt-5 font-bold p-3" id="diseaseSolutions" style="background-color: #F5EDA8; border-radius: 10px;"></div>
+            <div class="mt-5 font-bold" id="suggestProducts"></div>
+        </div>
+        
+        <div class="mt-5 font-bold" id="re"></div>
+
+        <div id="retry" class="px-5 justify-center flex-wrap my-10" style="display: none; align-items: center;">
+            <h3 id="rp">પરિણામ મળતું નથી.</h3>
+            <p>કૃપા કરીને ક્ષમા કરશો, હાલ અમને આ રોગની કોઈ માહિતી મળતી નથી.</p>
+            <button id="b" class="btn rounded" style="background-color: #0D986A; color:white">ફરીથી પ્રયાસ કરો.</button>
+        </div>
+
+        <div id="reach_limit" class="px-5 justify-center flex-wrap my-10" style="display: none; min-height:6rem; align-items: center;">
+            <strong>કૃપા કરીને ક્ષમા કરશો, તમે ઈમેજ સ્કેન કરવાના મહત્તમ પ્રયાસો સુધી પહોંચી ગયા છો.</strong>
+            <a href="/" class="btn rounded" style="background-color: #0D986A; color:white">પાછા જાવ</a>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+        // Add an event listener to the button
+        document.getElementById('b').addEventListener('click', function() {
+            // Reload the page
+            location.reload();
+        });
+
+        var storedMobileNumber = getCookie('mobile_number');
+    if (storedMobileNumber) {
+        var mobileInput = document.getElementById('mobileNumber');
+        mobileInput.value = storedMobileNumber;
+        // mobileInput.readOnly = true; // Set the field as readonly
+    }
+
+        function previewImage() {
+            var mobileInput = document.getElementById('mobileNumber');
+            var mobileError = document.getElementById('mobileError');
+
+            // Validate the mobile number (you can customize this validation as needed)
+            var mobileRegex = /^[0-9]{10}$/;
+            if (!mobileRegex.test(mobileInput.value)) {
+                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
+                mobileInput.classList.add('is-invalid');
+            } else {
+                mobileError.textContent = '';
+                mobileInput.classList.remove('is-invalid');
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').style.display = 'flex';
+                    setTimeout(uploadImage, 0);
+                }, 0); // Use 0 milliseconds to let the current execution context finish
+            }
+    }
+    
+    function uploadImage() {
+
+        // var mobileNumber = document.getElementById('mobileNumber').value;
+        // if (!mobileNumber){
+        //     document.getElementById('errorMessage').textContent = 'Invalid mobile number. Please enter a 10-digit number.';
+        // }
+
+        var input = document.getElementById('image');
+        var preview = document.getElementById('preview');
+        var mobileInput = document.getElementById('mobileNumber');
+
+        frappe.session.mobile_number = mobileInput.value
+        var formData = new FormData();
+        formData.append('image', document.getElementById('image').files[0]);
+        formData.append("mobile_number", mobileInput.value)
+
+            var xhr = new XMLHttpRequest();
+            // xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${mobileInput.value}`, true);
+            xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${getCookie(mobileInput.value)}`, true);
+
+            // Set up the callback function to handle the response
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    // Handle the response from the server
+                    console.log(response);
+
+                    const message = response.message
+                    
+                    document.getElementById("d").classList.add('hidden')
+                    if (message == "Reach Limit"){
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        console.log("Reach Limit")
+                        document.getElementById("reach_limit").style.display = 'grid'
+                        document.getElementById("p").innerHTML= ""
+                        return
+                    }
+                    if (message === undefined) {
+                        console.log('The message is undefined');
+                        document.getElementById("retry").style.display = 'grid'
+                        document.getElementById("result").style.display = 'none'
+                        document.getElementById("rp").innerHTML= "પરિણામ મળતું નથી."
+                        document.getElementById("diseaseName").style.display = "none"
+                        document.getElementById("cropName").style.display = "none"
+                        
+                    } else {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                    
+                            reader.onload = function (e) {
+                                preview.src = e.target.result;
+                                preview.style.display = 'block';
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    
+                    // document.getElementById('re').innerHTML = '<strong>Google Result: </strong>' + response.message;
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    
+                    // document.getElementById("result").classList.remove('hidden')
+                    
+                    document.getElementById("p").innerHTML= "પરિણામ:"
+                    document.getElementById('cropName').innerHTML = '<strong>પાકનું નામ: </strong>' + message.crop_name;
+                    document.getElementById('diseaseName').innerHTML = '<strong>રોગનું નામ: </strong>' + message.disease_name;
+                    document.getElementById('diseaseSymptoms').innerHTML = '<strong>રોગના લક્ષણો: </strong>' + message.disease_symptoms;
+                    document.getElementById('diseaseSolutions').innerHTML = '<strong>રોગનો ઉકેલ: </strong>' + message.disease_solutions;
+                    
+                    
+                    if (message.suggest_products.length > 0){
+                        var suggestProductsDiv = document.getElementById('suggestProducts');
+                        suggestProductsDiv.innerHTML = '<strong>ભલામણ કરેલ દવાઓ: </strong><br>';
+                    // Assuming suggestProducts is an array
+                    for (var i = 0; i < message.suggest_products.length; i++) {
+                        // Create a new row for every 4 items
+                        if (i % 4 === 0) {
+                                var rowDiv = document.createElement('div');
+                            rowDiv.className = 'row';
+                            suggestProductsDiv.appendChild(rowDiv);
+                        }
+                        // Create a column for each item
+                        var colDiv = document.createElement('div');
+                        colDiv.className = 'col-md-3'; // Adjust the column size as needed
+                        colDiv.innerHTML = `
+                            <img src="${window.location.origin + message.suggest_products[i].image}" class="mt-5" alt="Product Image">
+                            <div><strong>દવાનું નામ: </strong>${message.suggest_products[i].suggest_product}</div>
+                            <div class="mb-5"><strong>કિંમત: </strong>${message.suggest_products[i].price}</div>
+                        `;
+                    
+                        // Append the column to the current row
+                        rowDiv.appendChild(colDiv);
+                    }
+                }
+            }                    
+                document.getElementById('loadingScreen').style.display = 'none';
+                
+                document.getElementById("result").classList.remove('hidden')
+                    
+                    // You can display the scan results or take further action here
+                } else {
+                    // Handle errors
+                    console.error('Error uploading image:', xhr.status, xhr.statusText);
+                }
+            };
+            
+            // Send the FormData with the image file
+            xhr.send(formData);
+        }
+
+        function validateMobile() {
+            var mobileInput = document.getElementById('mobileNumber');
+            var mobileError = document.getElementById('mobileError');
+            var input = document.getElementById('image');
+
+            // Validate the mobile number (you can customize this validation as needed)
+            var mobileRegex = /^[0-9]{10}$/;
+            if (!mobileRegex.test(mobileInput.value)) {
+                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
+                mobileInput.classList.add('is-invalid');
+            } else {
+                mobileError.textContent = '';
+                mobileInput.classList.remove('is-invalid');
+                setCookie('mobile_number', mobileInput.value, 365);
+                if (input.value.trim() !== '') {
+                    previewImage();
+                }
+            }
+        }
+        // Function to get a cookie by name
+function getCookie(name) {
+    var nameEQ = name + '=';
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        while (cookie.charAt(0) === ' ') {
+            cookie = cookie.substring(1, cookie.length);
+        }
+        if (cookie.indexOf(nameEQ) === 0) {
+            return cookie.substring(nameEQ.length, cookie.length);
+        }
+    }
+    return null;
+}
+
+// Function to set a cookie
+function setCookie(name, value, days) {
+    var expires = '';
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + value + expires + '; path=/';
+}
+
+    </script>
+
+{% endblock %}

@@ -81,6 +81,8 @@
         /* min-height: 80vh; */
         margin-top: -1px;
     }
+
+  
     #preview {
     max-width: 100%;
     max-height: 300px;
@@ -89,19 +91,16 @@
     border-radius: 10px;
   }
 
-  
   @media only screen and (max-width: 400px) {
     #preview {
       width: 100%;
       height: auto;
     }
   }
-
     </style>
 {% endblock %}
 
 {% block content %}
-
 
 <div id="loadingScreen">
     <div id="loadingSpinner"></div>
@@ -110,8 +109,12 @@
 <div id="aa">
     <div class="container px-0 flex flex-wrap justify-center">
         <div class="content" id="d">
-            <!-- <img src="https://farming-doctor.frappe.cloud/files/01%20Splash.svg" class="w-100 p-0"/> -->
             <img src="https://farming-doctor.frappe.cloud/files/tab bar.svg" class="p-0 w-100"/>
+
+                          
+                        
+            <!-- <img id="preview" src="https://content3.jdmagicbox.com/comp/navi-mumbai/l4/022pxx22.xx22.220129175435.x1l4/catalogue/go-green-fruit-and-vegitable-nerul-navi-mumbai-vegetable-vendors-zd9urmtogl.jpg" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: block; border-radius: 10px;">             -->
+            <!-- <img id="preview" src="https://content3.jdmagicbox.com/comp/navi-mumbai/l4/022pxx22.xx22.220129175435.x1l4/catalogue/go-green-fruit-and-vegitable-nerul-navi-mumbai-vegetable-vendors-zd9urmtogl.jpg" alt="Preview"> -->
 
 
             <h3 class="text-xl text-[#002140] font-bold container mt-5">તમારા પાકને સાજો કરો</h3>
@@ -120,14 +123,59 @@
                 <div class="border-2 rounded-lg mt-5">
                     <div class="flex space-x-4 md:justify-left justify-center mt-10">
                         <img src="https://farming-doctor.frappe.cloud/files/leave.svg" alt="">
-                        <img class="mb-8 ml-4" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
+                        <img  class="ml-4" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#93E9BE" class="my-auto">
+                            <polygon points="10,2 12,0 22,12 12,24 10,22 18,12" fill="#93E9BE" stroke="#93E9BE" stroke-width="2" />
+                        </svg> -->
+                        
                         <img src="https://farming-doctor.frappe.cloud/files/right_mobile.svg" alt="">
-                        <img class="mb-8" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
+                        <img  class="" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#93E9BE" class="my-auto">
+                            <polygon points="10,2 12,0 22,12 12,24 10,22 18,12" fill="#93E9BE" stroke="#93E9BE" stroke-width="2" />
+                        </svg> -->
+                        <img src="https://farming-doctor.frappe.cloud/files/lend.svg" alt="">
+                    </div>
+                </div>       
+<!--                 
+                
+                <div class="border-2 rounded-lg mt-5">
+                    <div class="flex space-x-4 md:justify-left justify-center mt-10 items-center">
+                        <img src="https://farming-doctor.frappe.cloud/files/leave.svg" alt="">
+                        <svg height="20" width="20" class="my-auto ml-4">
+                            <defs>
+                                <radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                    <stop offset="0%" style="stop-color:#FFFEA8;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#93E9BE;stop-opacity:1" />
+                                </radialGradient>
+                            </defs>
+                        
+                            <polygon points="0,0 10,10 0,20" style="fill:none; stroke:#93E9BE; stroke-width:5;" />
+                        
+                            <polygon points="0,0 10,10 0,20" style="fill:url(#gradient);" />
+                        </svg>
+                        
+                        
+                        <img src="https://farming-doctor.frappe.cloud/files/right_mobile.svg" alt="">
+                        
+                        <svg height="20" width="20" class="my-auto ml-4">
+                            <defs>
+                                <radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                    <stop offset="0%" style="stop-color:#FFFEA8;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#93E9BE;stop-opacity:1" />
+                                </radialGradient>
+                            </defs>
+                        
+                            <polygon points="0,0 10,10 0,20" style="fill:none; stroke:#93E9BE; stroke-width:5;" />
+                        
+                            <polygon points="0,0 10,10 0,20" style="fill:url(#gradient);" />
+                        </svg>
+                        
+                        
                         <img src="https://farming-doctor.frappe.cloud/files/lend.svg" alt="">
                     </div>
                 </div>
-
                 
+                                 -->
                 <div class="mobile_number mt-10">
                     <div class="">
                         <div class="flex flex-wrap">
@@ -191,7 +239,7 @@
             location.reload();
         });
 
-        var storedMobileNumber = getCookie('mobile_number');
+    var storedMobileNumber = getCookie('mobile_number');
     if (storedMobileNumber) {
         var mobileInput = document.getElementById('mobileNumber');
         mobileInput.value = storedMobileNumber;
@@ -201,7 +249,7 @@
         function previewImage() {
             var mobileInput = document.getElementById('mobileNumber');
             var mobileError = document.getElementById('mobileError');
-
+                
             // Validate the mobile number (you can customize this validation as needed)
             var mobileRegex = /^[0-9]{10}$/;
             if (!mobileRegex.test(mobileInput.value)) {
@@ -212,7 +260,7 @@
                 mobileInput.classList.remove('is-invalid');
                 setTimeout(function() {
                     document.getElementById('loadingScreen').style.display = 'flex';
-                    setTimeout(uploadImage, 50);
+                    setTimeout(uploadImage, 0);
                 }, 0); // Use 0 milliseconds to let the current execution context finish
             }
     }
@@ -235,7 +283,7 @@
 
             var xhr = new XMLHttpRequest();
             // xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${mobileInput.value}`, true);
-            xhr.open('POST', `/api/method/plantix.cloud_api.scan_image?mobile_number=${getCookie(mobileInput.value)}`, true);
+            xhr.open('POST', `/api/method/plantix.static_api.scan_image?mobile_number=${getCookie(mobileInput.value)}`, true);
 
             // Set up the callback function to handle the response
             xhr.onload = function () {

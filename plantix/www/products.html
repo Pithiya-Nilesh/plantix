@@ -1,302 +1,106 @@
-{% extends 'templates/web.html' %}
-
-{% block title %}Upload Image{% endblock %}
-
-{% block head_include %}
- <style>
-        /* Add custom styles here */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <style>
         body {
-            background-color: #f8f9fa;
-            color: #495057;
-            background: #FFF;
+            /* Set body styles here */
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
         }
-        .page-container {
-            padding: 20px;
-            /* height: 100%; */
-            background-color: #ffffff;
-            /* border-radius: 8px; */
-            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-            /* margin-top: 20px;
-            margin-bottom: 20px; */
+
+    /* Default styles for screens wider than 600 pixels */
+/* .container {
+    width: 390px;
+    height: 100%;
+    flex-shrink: 0;
+    margin: 0 auto;
+} */
+
+.container {
+    display: flex;
+    width: 390px;
+    margin: 0 auto;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: space-between; /* Add space between the child elements */
+    height: 100vh; /* Full height of the viewport */
+}
+
+/* Media query for screens with a width of 600 pixels or less */
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 100%; 
+    }
+}
+
+
+        /* Style for image container */
+        .image-container {
+            display: flex;
+            justify-content: space-between;
         }
-        #loadingScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            display: none;
+
+        /* Add other styles as needed */
+
+        .bg-green {
+            border-radius: 0px 0px 200px 200px;
+background: #9CE5CB;
+width: 100%;
+            height: 60vh;/* Make sure the body covers the entire viewport height */
+            display: flex;
             justify-content: center;
             align-items: center;
+flex-shrink: 0; /* Make the container cover the entire viewport height */
         }
 
-        #loadingSpinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        h3{
-            margin-top: 0rem;
-        }
+        .bg-school {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    margin: 0 auto;
+}
 
-        #uploadBtn {
-        cursor: pointer;
-        display: inline-block;
-        padding: 10px 15px;
-        background-color: #0D986A;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        width: -webkit-fill-available
-    }
-
-    #image {
-        display: none;
-    }
-
-    mo{
-        width: -webkit-fill-available
-    }
-
-    .scan{
-        border-radius: 10px;
-        border: 1px solid #D0D0D0;
-        background: #FFF;
-        padding-left: 20px;
-        padding-right: 20px;
-        border-radius: 8px;
-        /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-        margin: 20px;
-    }
-    #aa{
-        /* min-height: 80vh; */
-        margin-top: -1px;
-    }
-
-  
-    #preview {
-    max-width: 100%;
-    max-height: 300px;
-    margin-top: 10px;
-    display: block;
-    border-radius: 10px;
-  }
-
-  @media only screen and (max-width: 400px) {
-    #preview {
-      width: 100%;
-      height: auto;
-    }
-  }
+.bg-school img {
+    width: 254px;
+    height: 254px;
+    align-self: center; /* Center the image horizontally */
+}
     </style>
-{% endblock %}
-
-{% block content %}
-
-<div id="loadingScreen">
-    <div id="loadingSpinner"></div>
-</div>
-
-<div id="aa">
-    <div class="container px-0 flex flex-wrap justify-center">
-        <div class="content" id="d">
-            <img src="https://farming-doctor.frappe.cloud/files/tab bar.svg" class="p-0 w-100"/>
-
-                          
-                        
-            <!-- <img id="preview" src="https://content3.jdmagicbox.com/comp/navi-mumbai/l4/022pxx22.xx22.220129175435.x1l4/catalogue/go-green-fruit-and-vegitable-nerul-navi-mumbai-vegetable-vendors-zd9urmtogl.jpg" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: block; border-radius: 10px;">             -->
-            <!-- <img id="preview" src="https://content3.jdmagicbox.com/comp/navi-mumbai/l4/022pxx22.xx22.220129175435.x1l4/catalogue/go-green-fruit-and-vegitable-nerul-navi-mumbai-vegetable-vendors-zd9urmtogl.jpg" alt="Preview"> -->
-
-
-            <h3 class="text-xl text-[#002140] font-bold container mt-5">તમારા પાકને સાજો કરો</h3>
-            <div class="scan">
-
-                <div class="border-2 rounded-lg mt-5">
-                    <div class="flex space-x-4 md:justify-left justify-center mt-10">
-                        <img src="https://farming-doctor.frappe.cloud/files/leave.svg" alt="">
-                        <img  class="ml-4" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#93E9BE" class="my-auto">
-                            <polygon points="10,2 12,0 22,12 12,24 10,22 18,12" fill="#93E9BE" stroke="#93E9BE" stroke-width="2" />
-                        </svg> -->
-                        
-                        <img src="https://farming-doctor.frappe.cloud/files/right_mobile.svg" alt="">
-                        <img  class="" src="https://farming-doctor.frappe.cloud/files/right_arrow.svg" alt="">
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="#93E9BE" class="my-auto">
-                            <polygon points="10,2 12,0 22,12 12,24 10,22 18,12" fill="#93E9BE" stroke="#93E9BE" stroke-width="2" />
-                        </svg> -->
-                        <img src="https://farming-doctor.frappe.cloud/files/lend.svg" alt="">
-                    </div>
-                </div>       
-<!--                 
-                
-                <div class="border-2 rounded-lg mt-5">
-                    <div class="flex space-x-4 md:justify-left justify-center mt-10 items-center">
-                        <img src="https://farming-doctor.frappe.cloud/files/leave.svg" alt="">
-                        <svg height="20" width="20" class="my-auto ml-4">
-                            <defs>
-                                <radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                    <stop offset="0%" style="stop-color:#FFFEA8;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#93E9BE;stop-opacity:1" />
-                                </radialGradient>
-                            </defs>
-                        
-                            <polygon points="0,0 10,10 0,20" style="fill:none; stroke:#93E9BE; stroke-width:5;" />
-                        
-                            <polygon points="0,0 10,10 0,20" style="fill:url(#gradient);" />
-                        </svg>
-                        
-                        
-                        <img src="https://farming-doctor.frappe.cloud/files/right_mobile.svg" alt="">
-                        
-                        <svg height="20" width="20" class="my-auto ml-4">
-                            <defs>
-                                <radialGradient id="gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                    <stop offset="0%" style="stop-color:#FFFEA8;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#93E9BE;stop-opacity:1" />
-                                </radialGradient>
-                            </defs>
-                        
-                            <polygon points="0,0 10,10 0,20" style="fill:none; stroke:#93E9BE; stroke-width:5;" />
-                        
-                            <polygon points="0,0 10,10 0,20" style="fill:url(#gradient);" />
-                        </svg>
-                        
-                        
-                        <img src="https://farming-doctor.frappe.cloud/files/lend.svg" alt="">
-                    </div>
-                </div>
-                
-                                 -->
-                <div class="mobile_number mt-10">
-                    <div class="">
-                        <div class="flex flex-wrap">
-                            {% if frappe.session.mobile_number %}
-                            <h5 for="mobileNumber" class="form-label">મોબાઇલ નંબર દાખલ કરો:</h5>
-                            <input type="text" class="form-control mo" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" readonly value="{{ frappe.session.mobile_number }}">
-                            {% else %}
-                            <h5 for="mobileNumber" class="form-label">મોબાઇલ નંબર દાખલ કરો:</h5>
-                            <input type="text" class="form-control mo" id="mobileNumber" placeholder="મોબાઇલ નંબર દાખલ કરો" onblur="validateMobile()">
-                            {% endif %}
-                            <div id="mobileError" class="text-danger"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="px-3 mt-5">
-                    <form id="uploadForm" enctype="multipart/form-data">
-                        <div class="row justify-content-center">
-                            <div class="w-100">
-                                <label for="image" id="uploadBtn" class="text-center">ફોટો પાડો</label>
-                                <input type="" name="image" id="image" accept="image/*" required onclick="previewImage()" class="form-control-file">
-                                <br>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        
+</head>
+<body>
+    <!-- <div class="container">
+            <div class="bg-green">
+            <img src="https://farming-doctor.frappe.cloud/files/plantify.svg" alt="">
         </div>
-        <div id="result" class="result-container hidden container max-w-[100vh]">
-            <h3 class="mt-3" id="p">પરિણામ મળતું નથી.</h3>
-            <div class="font-bold p-3" id="cropName" style="background-color: #F5EDA8; border-radius: 5px"></div>
-            <!-- <img id="preview" src="#" alt="Preview" style="max-width: 100%; max-height: 300px; margin-top: 10px; display: none; border-radius: 10px;"> -->
-            <img id="preview" src="#" alt="Preview">
-            <div class="font-bold p-3 mt-5" id="diseaseName" style="background-color: #F5EDA8; border-radius: 5px"></div>
-            <div class="mt-5 font-bold" id="diseaseSymptoms"></div>
-            <div class="mt-5 font-bold p-3" id="diseaseSolutions" style="background-color: #F5EDA8; border-radius: 10px;"></div>
-            <div class="mt-5 font-bold" id="suggestProducts"></div>
+        <div class="bg-school">
+            <img src="https://farming-doctor.frappe.cloud/files/pushtisanskar.svg" alt="">
         </div>
-        
-        <div class="mt-5 font-bold" id="re"></div>
+    </div> -->
 
-        <div id="retry" class="px-5 justify-center flex-wrap my-10" style="display: none; align-items: center;">
-            <h3 id="rp">પરિણામ મળતું નથી.</h3>
-            <p>કૃપા કરીને ક્ષમા કરશો, હાલ અમને આ રોગની કોઈ માહિતી મળતી નથી.</p>
-            <button id="b" class="btn rounded" style="background-color: #0D986A; color:white">ફરીથી પ્રયાસ કરો.</button>
+    <div class="container">
+        <div class="bg-green">
+            <img src="https://farming-doctor.frappe.cloud/files/plantify.svg" alt="">
         </div>
-
-        <div id="reach_limit" class="px-5 justify-center flex-wrap my-10" style="display: none; min-height:6rem; align-items: center;">
-            <strong>કૃપા કરીને ક્ષમા કરશો, તમે ઈમેજ સ્કેન કરવાના મહત્તમ પ્રયાસો સુધી પહોંચી ગયા છો.</strong>
-            <a href="/" class="btn rounded" style="background-color: #0D986A; color:white">પાછા જાવ</a>
+        <div class="bg-school">
+            <img src="https://farming-doctor.frappe.cloud/files/pushtisanskar.svg" alt="">
         </div>
     </div>
-</div>
-
     <script>
-
-        // Add an event listener to the button
-        document.getElementById('b').addEventListener('click', function() {
-            // Reload the page
-            location.reload();
-        });
-
-        var storedMobileNumber = getCookie('mobile_number');
-    if (storedMobileNumber) {
-        var mobileInput = document.getElementById('mobileNumber');
-        mobileInput.value = storedMobileNumber;
-        // mobileInput.readOnly = true; // Set the field as readonly
+         function redirectToAnotherPage() {
+      // Set the timeout to 2000 milliseconds (2 seconds)
+      setTimeout(function() {
+        // Replace 'your-target-url' with the actual URL you want to redirect to
+        window.location.href = '/static';
+      }, 1500);
     }
 
-        function previewImage() {
-            var mobileInput = document.getElementById('mobileNumber');
-            var mobileError = document.getElementById('mobileError');
-
-            // Validate the mobile number (you can customize this validation as needed)
-            var mobileRegex = /^[0-9]{10}$/;
-            if (!mobileRegex.test(mobileInput.value)) {
-                mobileError.textContent = 'અમાન્ય મોબાઇલ નંબર. 10 અંકનું નંબર દાખલ કરો.';
-                mobileInput.classList.add('is-invalid');
-            } else {
-                mobileError.textContent = '';
-                mobileInput.classList.remove('is-invalid');
-                setTimeout(function() {
-                    document.getElementById('loadingScreen').style.display = 'flex';
-                    setTimeout(uploadImage, 0);
-                }, 0); // Use 0 milliseconds to let the current execution context finish
-            }
-    }
-    
-    function uploadImage() {
-        
-    }
-
-
-        // Function to get a cookie by name
-function getCookie(name) {
-    var nameEQ = name + '=';
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i];
-        while (cookie.charAt(0) === ' ') {
-            cookie = cookie.substring(1, cookie.length);
-        }
-        if (cookie.indexOf(nameEQ) === 0) {
-            return cookie.substring(nameEQ.length, cookie.length);
-        }
-    }
-    return null;
-}
-
-// Function to set a cookie
-function setCookie(name, value, days) {
-    var expires = '';
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = '; expires=' + date.toUTCString();
-    }
-    document.cookie = name + '=' + value + expires + '; path=/';
-}
-
+    // Call the function when the page loads
+    window.onload = redirectToAnotherPage;
     </script>
-
-{% endblock %}
+</body>
+</html>

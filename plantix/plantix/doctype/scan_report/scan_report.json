@@ -9,6 +9,7 @@
  "field_order": [
   "mobile_no",
   "image",
+  "crop_name",
   "found_result",
   "result",
   "google_result"
@@ -47,11 +48,17 @@
    "fieldtype": "Long Text",
    "in_list_view": 1,
    "label": "Google Result"
+  },
+  {
+   "fetch_from": "result.crop_name",
+   "fieldname": "crop_name",
+   "fieldtype": "Data",
+   "label": "Crop Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-25 13:38:59.386314",
+ "modified": "2023-12-12 10:29:17.562415",
  "modified_by": "Administrator",
  "module": "Plantix",
  "name": "Scan Report",

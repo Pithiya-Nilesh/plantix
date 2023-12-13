@@ -211,7 +211,10 @@ app_license = "asd"
 
 # Authentication and authorization
 # --------------------------------
-
+website_redirects = [
+    {"source": "/blog", "target": "/default_turdal"}
+]
+  
 # auth_hooks = [
 #	"plantix.auth.validate"
 # ]
